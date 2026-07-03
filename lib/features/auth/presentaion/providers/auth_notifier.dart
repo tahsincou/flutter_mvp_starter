@@ -26,4 +26,29 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
+
+  Future<bool> checkLogin() async {
+    state = state.copyWith(isLoading: true);
+
+    final user = await ref.read(checkLoginUseCaseProvider)();
+
+    if (user != null) {
+      state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: true,
+        user: user,
+      );
+      return true;
+    }
+
+    state = state.copyWith(isLoading: false, isAuthenticated: false);
+
+    return false;
+  }
+
+  Future<void> logout() async {
+    await ref.read(logoutUseCaseProvider)();
+
+    state = const AuthState();
+  }
 }

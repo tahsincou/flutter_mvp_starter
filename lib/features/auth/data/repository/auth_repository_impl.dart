@@ -27,6 +27,12 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User?> currentUser() async {
-    return null;
+    final token = await storage.getToken();
+
+    if (token == null || token.isEmpty) {
+      return null;
+    }
+
+    return User(id: 0, name: '', email: '', token: token);
   }
 }

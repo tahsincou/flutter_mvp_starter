@@ -169,22 +169,3 @@ Repository
 ↓
 
 API
-
-03 July, 2026:
-LoginUseCase
-
-Future:
-RegisterUseCase
-LogoutUseCase
-RefreshTokenUseCase
-ForgotPasswordUseCase
-
-
-- Feature First
-- SOLID
-- Clean Architecture
-- Repository Pattern
-- Dependency Injection (Riverpod)
-- Single Responsibility
-- Immutable State
-- Reusable Widgets

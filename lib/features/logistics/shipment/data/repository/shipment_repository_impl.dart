@@ -33,4 +33,9 @@ class ShipmentRepositoryImpl implements ShipmentRepository {
   Future<void> updateShipment(Shipment shipment) {
     return localDataSource.updateShipment(shipment);
   }
+
+  @override
+  Future<void> deleteShipment(String trackingId) {
+    return localDataSource.deleteShipment(trackingId);
+  }
 }

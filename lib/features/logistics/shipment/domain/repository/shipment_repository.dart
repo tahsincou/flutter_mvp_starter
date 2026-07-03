@@ -8,4 +8,6 @@ abstract interface class ShipmentRepository {
   Future<void> createShipment(CreateShipmentRequest request);
 
   Future<void> updateShipment(Shipment shipment);
+
+  Future<void> deleteShipment(String trackingId);
 }

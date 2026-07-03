@@ -3,9 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logistic_operation/features/auth/presentaion/providers/auth_notifier.dart';
 import 'package:logistic_operation/features/dashboard/presentation/providers/dashboard_notifier.dart';
+import 'package:logistic_operation/features/dashboard/presentation/providers/dashboard_provider.dart';
 import 'package:logistic_operation/features/logistics/shipment/presentation/providers/shipment_notifier.dart';
+import 'package:logistic_operation/shared/widgets/app_search_field.dart';
 import 'package:logistic_operation/shared/widgets/dashboard_card.dart';
+import 'package:logistic_operation/shared/widgets/empty_state.dart';
 import 'package:logistic_operation/shared/widgets/shipment_tile.dart';
+import 'package:logistic_operation/shared/widgets/status_filter_chips.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
@@ -29,9 +33,10 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(dashboardNotifierProvider);
     final shipmentState = ref.watch(shipmentNotifierProvider);
+    final summary = ref.watch(dashboardSummaryProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        //title: const Text('Welcome'),
         actions: [
           IconButton(
             onPressed: () async {
@@ -47,68 +52,139 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       ),
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Today\'s Overview',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  GridView.count(
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 1.6,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      DashboardCard(
-                        title: 'Deliveries',
-                        value: state.summary?.deliveries.toString() ?? '0',
+          : RefreshIndicator(
+              onRefresh: () async {
+                await ref
+                    .read(shipmentNotifierProvider.notifier)
+                    .loadShipments();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Today\'s Overview',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
-                      DashboardCard(
-                        title: 'Pending',
-                        value: state.summary?.pending.toString() ?? '0',
-                      ),
-                      DashboardCard(
-                        title: 'Completed',
-                        value: state.summary?.completed.toString() ?? '0',
-                      ),
-                      DashboardCard(
-                        title: 'Failed',
-                        value: state.summary?.failed.toString() ?? '0',
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
+                    ),
 
-                  const Text(
-                    'Recent Shipments',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+                    const SizedBox(height: 16),
 
-                  const SizedBox(height: 12),
-
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: shipmentState.shipments.length,
-                      itemBuilder: (context, index) {
-                        final shipment = shipmentState.shipments[index];
-                        return ShipmentTile(
-                          shipment: shipment,
-                          onTap: () {
-                            context.push('/shipment-details', extra: shipment);
-                          },
-                        );
+                    SingleChildScrollView(
+                      child: GridView.count(
+                        controller: ScrollController(),
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: 1.6,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          DashboardCard(
+                            title: 'Deliveries',
+                            value: summary.deliveries.toString() ?? '0',
+                            icon: Icons.local_shipping,
+                            iconColor: Colors.blue.shade700,
+                          ),
+                          DashboardCard(
+                            title: 'Pending',
+                            value: summary.pending.toString() ?? '0',
+                            icon: Icons.schedule,
+                            iconColor: Colors.orange.shade700,
+                          ),
+                          DashboardCard(
+                            title: 'Completed',
+                            value: summary.completed.toString() ?? '0',
+                            icon: Icons.check_circle,
+                            iconColor: Colors.green.shade700,
+                          ),
+                          DashboardCard(
+                            title: 'Failed',
+                            value: summary.failed.toString() ?? '0',
+                            icon: Icons.cancel,
+                            iconColor: Colors.red.shade700,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    StatusFilterChips(
+                      selected: shipmentState.statusFilter,
+                      onSelected: (status) {
+                        ref
+                            .read(shipmentNotifierProvider.notifier)
+                            .filterShipments(status: status);
                       },
                     ),
-                  ),
-                ],
+
+                    const SizedBox(height: 16),
+
+                    AppSearchField(
+                      hintText: 'Search by tracking ID or customer',
+                      onChanged: (value) {
+                        ref
+                            .read(shipmentNotifierProvider.notifier)
+                            .filterShipments(searchQuery: value);
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Recent Shipments',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await ref
+                              .read(shipmentNotifierProvider.notifier)
+                              .loadShipments();
+                        },
+                        child: shipmentState.shipments.isEmpty
+                            ? Center(
+                                child: EmptyState(
+                                  icon: Icons.local_shipping_outlined,
+                                  title: 'No Shipments Found',
+                                  message:
+                                      'Tap + to create your first shipment.',
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: shipmentState.shipments.length,
+                                itemBuilder: (context, index) {
+                                  final shipment =
+                                      shipmentState.shipments[index];
+                                  return ShipmentTile(
+                                    shipment: shipment,
+                                    onTap: () async {
+                                      final result = await context.push<bool>(
+                                        '/shipment-details',
+                                        extra: shipment,
+                                      );
+
+                                      if (result == true) {
+                                        ref
+                                            .read(
+                                              shipmentNotifierProvider.notifier,
+                                            )
+                                            .loadShipments();
+                                      }
+                                    },
+                                  );
+                                },
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
       floatingActionButton: FloatingActionButton(

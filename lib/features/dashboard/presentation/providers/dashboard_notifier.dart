@@ -1,28 +1,27 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:logistic_operation/features/dashboard/domain/utils/dashboard_summary_calculator.dart';
+import 'package:logistic_operation/features/logistics/shipment/domain/repository/shipment_repository.dart';
+import 'package:logistic_operation/features/logistics/shipment/presentation/providers/shipment_provider.dart';
 
-import 'dashboard_provider.dart';
 import 'dashboard_state.dart';
 
 final dashboardNotifierProvider =
-    StateNotifierProvider<DashboardNotifier, DashboardState>(
-      (ref) => DashboardNotifier(ref),
-    );
+    StateNotifierProvider<DashboardNotifier, DashboardState>((ref) {
+      return DashboardNotifier(ref.read(shipmentRepositoryProvider));
+    });
 
 class DashboardNotifier extends StateNotifier<DashboardState> {
-  DashboardNotifier(this.ref) : super(const DashboardState());
+  DashboardNotifier(this._shipmentRepository) : super(const DashboardState());
 
-  final Ref ref;
+  final ShipmentRepository _shipmentRepository;
 
   Future<void> loadSummary() async {
     state = state.copyWith(isLoading: true);
 
-    try {
-      final summary = await ref.read(getDashboardSummaryUseCaseProvider)();
+    final shipments = await _shipmentRepository.getRecentShipments();
 
-      state = state.copyWith(isLoading: false, summary: summary);
-    } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
-    }
+    final summary = DashboardSummaryCalculator.calculate(shipments);
+
+    state = state.copyWith(isLoading: false, summary: summary);
   }
 }

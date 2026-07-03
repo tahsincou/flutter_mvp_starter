@@ -46,4 +46,8 @@ class ShipmentLocalDataSource {
       _shipments[index] = shipment;
     }
   }
+
+  Future<void> deleteShipment(String trackingId) async {
+    _shipments.removeWhere((shipment) => shipment.trackingId == trackingId);
+  }
 }

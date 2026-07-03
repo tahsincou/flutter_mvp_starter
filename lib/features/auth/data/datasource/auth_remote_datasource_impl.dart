@@ -7,7 +7,7 @@ import '../dto/login_request.dart';
 import 'auth_remote_datasource.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final Dio _dio = DioClient.dio;
+  final Dio _dio = DioClient.create();
 
   @override
   Future<UserModel> login(LoginRequest request) async {

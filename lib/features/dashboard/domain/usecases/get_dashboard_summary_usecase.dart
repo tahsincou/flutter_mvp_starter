@@ -6,7 +6,7 @@ class GetDashboardSummaryUseCase {
 
   const GetDashboardSummaryUseCase(this.repository);
 
-  Future<DashboardSummary> call() {
-    return repository.getSummary();
-  }
+  // Future<DashboardSummary> call() {
+  //   return repository.getSummary();
+  // }
 }

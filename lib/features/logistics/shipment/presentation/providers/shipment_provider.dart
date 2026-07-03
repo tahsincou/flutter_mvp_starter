@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logistic_operation/features/logistics/shipment/data/datasources/shipment_local_datasource.dart';
 import 'package:logistic_operation/features/logistics/shipment/data/repository/shipment_repository_impl.dart';
 import 'package:logistic_operation/features/logistics/shipment/domain/usecases/create_shipment_usecase.dart';
+import 'package:logistic_operation/features/logistics/shipment/domain/usecases/delete_shipment_usecase.dart';
 import 'package:logistic_operation/features/logistics/shipment/domain/usecases/get_recent_shipment_usecase.dart';
 import 'package:logistic_operation/features/logistics/shipment/domain/usecases/update_shipment_usecase.dart';
 
@@ -29,4 +30,8 @@ final shipmentLocalDataSourceProvider = Provider<ShipmentLocalDataSource>((
 
 final updateShipmentUseCaseProvider = Provider<UpdateShipmentUseCase>((ref) {
   return UpdateShipmentUseCase(ref.read(shipmentRepositoryProvider));
+});
+
+final deleteShipmentUseCaseProvider = Provider<DeleteShipmentUseCase>((ref) {
+  return DeleteShipmentUseCase(ref.read(shipmentRepositoryProvider));
 });

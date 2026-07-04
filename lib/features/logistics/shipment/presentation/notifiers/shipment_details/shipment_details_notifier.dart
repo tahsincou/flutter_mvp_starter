@@ -13,6 +13,6 @@ class ShipmentDetailsNotifier extends StateNotifier<ShipmentDetailsState> {
 
     final details = await repository.getShipmentDetails(trackingId);
 
-    state = state.copyWith(isLoading: false, details: details);
+    state = state.copyWith(details: details, isLoading: false);
   }
 }

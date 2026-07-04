@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logistic_operation/features/logistics/shipment/presentation/notifiers/shipment_details/shipment_details_provider.dart';
 import 'package:logistic_operation/features/logistics/shipment/presentation/providers/shipment_notifier.dart';
+import 'package:logistic_operation/features/logistics/shipment/presentation/widgets/shipment_timeline_widget.dart';
+import 'package:logistic_operation/shared/constants/app_spacing.dart';
 import 'package:logistic_operation/shared/widgets/confirmation_dialog.dart';
 import 'package:logistic_operation/shared/widgets/info_tile.dart';
 
@@ -32,25 +34,17 @@ class _ShipmentDetailsPageState extends ConsumerState<ShipmentDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(shipmentDetailsNotifierProvider);
+
+    if (state.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shipment Details'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () async {
-              final updated = await context.push<bool>(
-                '/edit-shipment',
-                extra: widget.shipment,
-              );
-
-              if (updated == true && context.mounted) {
-                context.pop(true);
-              }
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.delete, color: Colors.redAccent),
             onPressed: () async {
               final confirmed = await showDialog<bool>(
                 context: context,
@@ -74,67 +68,145 @@ class _ShipmentDetailsPageState extends ConsumerState<ShipmentDetailsPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    const Icon(Icons.qr_code_2),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Tracking ID',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                          Text(
-                            widget.shipment.trackingId,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 70,
+                        width: 70,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: const Icon(Icons.local_shipping, size: 36),
                       ),
+                      const SizedBox(width: AppSpacing.s),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.shipment.trackingId,
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+
+                            const SizedBox(height: 8),
+
+                            Chip(
+                              avatar: const Icon(
+                                Icons.local_shipping,
+                                size: 18,
+                              ),
+                              label: Text(widget.shipment.status),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            Text(
+                              widget.shipment.customer,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.m),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Card(
+                child: Column(
+                  children: [
+                    InfoTile(
+                      icon: Icons.person,
+                      title: 'Customer',
+                      value: widget.shipment.customer,
+                    ),
+                    Divider(height: 1),
+                    InfoTile(
+                      icon: Icons.phone,
+                      title: 'Phone',
+                      value: widget.shipment.phone,
+                    ),
+                    Divider(height: 1),
+                    InfoTile(
+                      icon: Icons.location_on,
+                      title: 'Address',
+                      value: widget.shipment.address,
+                    ),
+                    Divider(height: 1),
+                    InfoTile(
+                      icon: Icons.local_shipping,
+                      title: 'Status',
+                      value: widget.shipment.status,
                     ),
                   ],
                 ),
               ),
             ),
+            const SizedBox(height: AppSpacing.m),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.route),
 
-            const SizedBox(height: 24),
-            InfoTile(
-              icon: Icons.person,
-              title: 'Customer',
-              value: widget.shipment.customer,
-            ),
+                          const SizedBox(width: 8),
 
-            InfoTile(
-              icon: Icons.phone,
-              title: 'Phone',
-              value: widget.shipment.phone,
-            ),
+                          Text(
+                            "Shipment Progress",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
 
-            InfoTile(
-              icon: Icons.location_on,
-              title: 'Address',
-              value: widget.shipment.address,
-            ),
+                      const SizedBox(height: 24),
 
-            InfoTile(
-              icon: Icons.local_shipping,
-              title: 'Status',
-              value: widget.shipment.status,
+                      ShipmentTimelineWidget(
+                        timeline: state.details?.timeline ?? const [],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          final updated = await context.push<bool>(
+            '/edit-shipment',
+            extra: widget.shipment,
+          );
+
+          if (updated == true && context.mounted) {
+            context.pop(true);
+          }
+        },
+        icon: const Icon(Icons.edit),
+        label: const Text("Edit"),
       ),
     );
   }

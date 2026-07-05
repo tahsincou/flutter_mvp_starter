@@ -35,7 +35,7 @@ class ShipmentState {
       error: error,
       searchQuery: searchQuery ?? this.searchQuery,
       statusFilter: statusFilter ?? this.statusFilter,
-      isFromCache: isFromCache ?? this.isFromCache,
+      isFromCache: isFromCache,
     );
   }
 }

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:logistic_operation/core/config/app_config.dart';
+import 'package:logistic_operation/core/config/environment.dart';
 
 Future<bool?> showEnvironmentBottomSheet(BuildContext context) async {
-  String selected = AppConfig.environment;
-
-  return await showModalBottomSheet(
+  Environment selected = AppConfig.environment;
+  final availableEnvironments = [
+    Environment.demo,
+    Environment.development,
+    Environment.staging,
+    Environment.production,
+  ];
+  return await showModalBottomSheet<bool>(
     context: context,
     builder: (_) {
       return StatefulBuilder(
@@ -19,37 +25,40 @@ Future<bool?> showEnvironmentBottomSheet(BuildContext context) async {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
 
-                RadioListTile<String>(
-                  value: 'demo',
-                  groupValue: selected,
-                  title: const Text('Demo (JSON Server)'),
-                  onChanged: (value) {
-                    setState(() => selected = value!);
-                  },
-                ),
+                const SizedBox(height: 16),
 
-                RadioListTile<String>(
-                  value: 'live',
-                  groupValue: selected,
-                  title: const Text('Live (Production API)'),
-                  onChanged: (value) {
-                    setState(() => selected = value!);
-                  },
-                ),
-
-                FilledButton(
-                  onPressed: () async {
-                    if (selected != AppConfig.environment) {
-                      await AppConfig.changeEnvironment(selected);
-
-                      if (context.mounted) {
-                        Navigator.pop(context, true);
+                ...availableEnvironments.map(
+                  (environment) => RadioListTile<Environment>(
+                    value: environment,
+                    groupValue: selected,
+                    title: Text(environment.title),
+                    subtitle: Text(environment.description),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() => selected = value);
                       }
-                    } else {
-                      Navigator.pop(context, false);
-                    }
-                  },
-                  child: const Text('Apply'),
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () async {
+                      if (selected != AppConfig.environment) {
+                        await AppConfig.changeEnvironment(selected);
+
+                        if (context.mounted) {
+                          Navigator.pop(context, true);
+                        }
+                      } else {
+                        Navigator.pop(context, false);
+                      }
+                    },
+                    child: const Text('Apply'),
+                  ),
                 ),
               ],
             ),

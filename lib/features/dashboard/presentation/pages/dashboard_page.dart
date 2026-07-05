@@ -9,7 +9,6 @@ import 'package:logistic_operation/shared/widgets/app_empty.dart';
 import 'package:logistic_operation/shared/widgets/app_loading.dart';
 import 'package:logistic_operation/shared/widgets/app_search_field.dart';
 import 'package:logistic_operation/shared/widgets/dashboard_card.dart';
-import 'package:logistic_operation/shared/widgets/empty_state.dart';
 import 'package:logistic_operation/shared/widgets/shipment_tile.dart';
 import 'package:logistic_operation/shared/widgets/status_filter_chips.dart';
 
@@ -90,25 +89,25 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                         children: [
                           DashboardCard(
                             title: 'Deliveries',
-                            value: summary.deliveries.toString() ?? '0',
+                            value: summary.deliveries.toString(),
                             icon: Icons.local_shipping,
                             iconColor: Colors.blue.shade700,
                           ),
                           DashboardCard(
                             title: 'Pending',
-                            value: summary.pending.toString() ?? '0',
+                            value: summary.pending.toString(),
                             icon: Icons.schedule,
                             iconColor: Colors.orange.shade700,
                           ),
                           DashboardCard(
                             title: 'Completed',
-                            value: summary.completed.toString() ?? '0',
+                            value: summary.completed.toString(),
                             icon: Icons.check_circle,
                             iconColor: Colors.green.shade700,
                           ),
                           DashboardCard(
                             title: 'Failed',
-                            value: summary.failed.toString() ?? '0',
+                            value: summary.failed.toString(),
                             icon: Icons.cancel,
                             iconColor: Colors.red.shade700,
                           ),

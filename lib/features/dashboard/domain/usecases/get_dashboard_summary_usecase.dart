@@ -1,4 +1,3 @@
-import '../entities/dashboard_summary.dart';
 import '../repository/dashboard_repository.dart';
 
 class GetDashboardSummaryUseCase {

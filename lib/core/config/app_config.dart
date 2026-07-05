@@ -1,26 +1,42 @@
+import 'package:logistic_operation/core/config/environment.dart';
+
 import '../services/environment_service.dart';
 
 class AppConfig {
-  static String _environment = 'demo';
+  static Environment _environment = Environment.demo;
 
   static Future<void> initialize() async {
-    _environment = await EnvironmentService.load();
+    final env = await EnvironmentService.load();
+
+    _environment = Environment.values.firstWhere(
+      (e) => e.name == env,
+      orElse: () => Environment.demo,
+    );
   }
 
-  static bool get isDemo => _environment == 'demo';
+  static bool get isDemo => _environment == Environment.demo;
 
-  static String get environment => _environment;
+  static Environment get environment => _environment;
 
   static String get baseUrl {
-    if (isDemo) {
-      return 'http://localhost:3000';
-    }
+    switch (_environment) {
+      case Environment.demo:
+        return 'http://localhost:3000';
 
-    return 'https://your-production-api.com';
+      case Environment.development:
+        return 'https://dev-api.company.com';
+
+      case Environment.staging:
+        return 'https://staging-api.company.com';
+
+      case Environment.production:
+        return 'https://api.company.com';
+    }
   }
 
-  static Future<void> changeEnvironment(String env) async {
+  static Future<void> changeEnvironment(Environment env) async {
     _environment = env;
-    await EnvironmentService.save(env);
+
+    await EnvironmentService.save(env.name);
   }
 }

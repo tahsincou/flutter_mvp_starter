@@ -165,6 +165,7 @@ class _CreateShipmentPageState extends ConsumerState<ShipmentFormPage> {
                         if (!mounted) return;
 
                         if (success) {
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -175,6 +176,7 @@ class _CreateShipmentPageState extends ConsumerState<ShipmentFormPage> {
                             ),
                           );
 
+                          // ignore: use_build_context_synchronously
                           context.pop(true);
                         }
                       },

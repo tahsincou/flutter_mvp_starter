@@ -2,7 +2,6 @@ import 'package:logistic_operation/core/common/repository_result.dart';
 import 'package:logistic_operation/core/network/network_exception.dart';
 import 'package:logistic_operation/features/logistics/shipment/data/datasources/shipment_local_data_source.dart';
 import 'package:logistic_operation/features/logistics/shipment/data/datasources/shipment_remote_datasource.dart';
-import 'package:logistic_operation/features/logistics/shipment/data/models/shipement_model.dart';
 import 'package:logistic_operation/features/logistics/shipment/domain/entities/shipment_details.dart';
 import 'package:logistic_operation/features/logistics/shipment/domain/entities/shipment_timeline.dart';
 import 'package:logistic_operation/features/logistics/shipment/domain/params/create_shipment.dart';

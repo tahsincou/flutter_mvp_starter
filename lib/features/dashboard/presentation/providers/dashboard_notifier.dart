@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:logistic_operation/core/providers/repository_providers.dart';
 import 'package:logistic_operation/features/dashboard/domain/utils/dashboard_summary_calculator.dart';
 import 'package:logistic_operation/features/logistics/shipment/domain/repository/shipment_repository.dart';
-import 'package:logistic_operation/features/logistics/shipment/presentation/providers/shipment_provider.dart';
 
 import 'dashboard_state.dart';
 

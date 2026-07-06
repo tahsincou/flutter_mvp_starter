@@ -18,7 +18,9 @@ class AppCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      shape: const RoundedRectangleBorder(borderRadius: AppRadius.card),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+      ),
       child: Padding(padding: padding, child: child),
     );
   }

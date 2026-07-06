@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:logistic_operation/shared/theme/app_colors.dart';
+import 'package:logistic_operation/shared/theme/app_text_styles.dart';
 
 class DashboardCard extends StatelessWidget {
   final String title;
@@ -26,21 +28,11 @@ class DashboardCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (icon != null)
-              Icon(
-                icon,
-                size: 25,
-                color: iconColor ?? Theme.of(context).primaryColor,
-              ),
+              Icon(icon, size: 25, color: iconColor ?? AppColors.primary),
 
-            Text(
-              value,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            Text(value, style: AppTextStyles.title),
 
-            Text(
-              title,
-              style: TextStyle(fontSize: 15, color: Colors.grey.shade600),
-            ),
+            Text(title, style: AppTextStyles.caption),
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:logistic_operation/features/dashboard/presentation/pages/dashboa
 import 'package:logistic_operation/features/logistics/shipment/domain/entities/shipment.dart';
 import 'package:logistic_operation/features/logistics/shipment/presentation/pages/create_shipment_page.dart';
 import 'package:logistic_operation/features/logistics/shipment/presentation/pages/shipment_details_page.dart';
+import 'package:logistic_operation/features/settings/settings_page.dart';
 import 'package:logistic_operation/features/splash/presentation/pages/splash_page.dart';
 
 class AppRouter {
@@ -12,6 +13,7 @@ class AppRouter {
     routes: [
       GoRoute(path: '/splash', builder: (_, __) => const SplashPage()),
       GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
+      GoRoute(path: '/settings', builder: (_, __) => const SettingsPage()),
       GoRoute(path: '/dashboard', builder: (_, __) => const DashboardPage()),
       GoRoute(
         path: '/shipment-details',

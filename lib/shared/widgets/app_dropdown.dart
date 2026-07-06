@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_radius.dart';
+
 class AppDropdown<T> extends StatelessWidget {
   final T? value;
   final List<DropdownMenuItem<T>> items;
@@ -23,7 +25,9 @@ class AppDropdown<T> extends StatelessWidget {
       onChanged: onChanged,
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
       ),
     );
   }

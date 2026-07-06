@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logistic_operation/shared/theme/app_radius.dart';
 
 class AppTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -34,7 +35,7 @@ class AppTextField extends StatelessWidget {
         labelText: label,
         hintText: hint,
         prefixIcon: prefixIcon,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }

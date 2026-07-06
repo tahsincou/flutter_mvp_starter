@@ -5,12 +5,17 @@ import 'package:logistic_operation/features/auth/presentaion/providers/auth_noti
 import 'package:logistic_operation/features/dashboard/presentation/providers/dashboard_notifier.dart';
 import 'package:logistic_operation/features/dashboard/presentation/providers/dashboard_provider.dart';
 import 'package:logistic_operation/features/logistics/shipment/presentation/providers/shipment_notifier.dart';
+import 'package:logistic_operation/shared/theme/app_colors.dart';
+import 'package:logistic_operation/shared/widgets/app_drawer.dart';
+import 'package:logistic_operation/shared/widgets/app_dropdown.dart';
 import 'package:logistic_operation/shared/widgets/app_empty.dart';
 import 'package:logistic_operation/shared/widgets/app_loading.dart';
 import 'package:logistic_operation/shared/widgets/app_search_field.dart';
 import 'package:logistic_operation/shared/widgets/dashboard_card.dart';
 import 'package:logistic_operation/shared/widgets/shipment_tile.dart';
 import 'package:logistic_operation/shared/widgets/status_filter_chips.dart';
+
+import '../../../../shared/theme/app_spacing.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
@@ -36,21 +41,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     final shipmentState = ref.watch(shipmentNotifierProvider);
     final summary = ref.watch(dashboardSummaryProvider);
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: const Text('Parcel Pathai'),
         actions: [
-          if (state.isFromCache)
-            Icon(Icons.wifi_off, color: Colors.red.shade700),
-          IconButton(
-            onPressed: () async {
-              await ref.read(authNotifierProvider.notifier).logout();
-
-              if (context.mounted) {
-                context.go('/login');
-              }
-            },
-            icon: const Icon(Icons.logout),
-          ),
+          if (state.isFromCache) Icon(Icons.wifi_off, color: AppColors.error),
         ],
       ),
       body: state.isLoading
@@ -62,7 +57,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                     .loadShipments();
               },
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacing.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -114,7 +109,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.lg),
                     StatusFilterChips(
                       selected: shipmentState.statusFilter,
                       onSelected: (status) {
@@ -134,7 +129,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                             .filterShipments(searchQuery: value);
                       },
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.lg),
                     const Text(
                       'Recent Shipments',
                       style: TextStyle(

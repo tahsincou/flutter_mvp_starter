@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logistic_operation/shared/theme/app_spacing.dart';
 
 class AppLoading extends StatelessWidget {
   const AppLoading({super.key, this.message});
@@ -9,14 +10,14 @@ class AppLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(AppSpacing.sm),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const CircularProgressIndicator(),
 
             if (message != null) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: AppSpacing.md),
               Text(message!, textAlign: TextAlign.center),
             ],
           ],

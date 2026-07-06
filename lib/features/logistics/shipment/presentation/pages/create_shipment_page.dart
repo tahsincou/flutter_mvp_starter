@@ -10,6 +10,8 @@ import 'package:logistic_operation/shared/widgets/app_button.dart';
 import 'package:logistic_operation/shared/widgets/app_dropdown.dart';
 import 'package:logistic_operation/shared/widgets/app_text_field.dart';
 
+import '../../../../../shared/theme/app_spacing.dart';
+
 class ShipmentFormPage extends ConsumerStatefulWidget {
   final Shipment? shipment;
 
@@ -53,7 +55,7 @@ class _CreateShipmentPageState extends ConsumerState<ShipmentFormPage> {
       body: Form(
         key: form.formKey,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacing.md),
           child: Column(
             children: [
               // Fields here
@@ -122,7 +124,7 @@ class _CreateShipmentPageState extends ConsumerState<ShipmentFormPage> {
                 validator: (value) =>
                     Validators.number(value, 'Delivery Charge'),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.lg),
 
               AppButton(
                 text: widget.shipment == null

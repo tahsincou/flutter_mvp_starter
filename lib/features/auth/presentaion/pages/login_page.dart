@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logistic_operation/core/locale/locale_extension.dart';
 import 'package:logistic_operation/shared/widgets/app_loading.dart';
 import 'package:logistic_operation/shared/widgets/environment_badge.dart';
 import 'package:logistic_operation/shared/widgets/environment_bottom_sheet.dart';
-
+import '../../../../shared/theme/app_spacing.dart';
 import '../providers/auth_notifier.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -49,7 +50,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.md),
         child: Form(
           key: _formKey,
           child: Column(
@@ -79,7 +80,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 },
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.lg),
 
               SizedBox(
                 width: double.infinity,
@@ -87,7 +88,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   onPressed: state.isLoading ? null : _login,
                   child: state.isLoading
                       ? const AppLoading(message: 'Logging in...')
-                      : const Text('Login'),
+                      : Text(context.l10n.login),
                 ),
               ),
 

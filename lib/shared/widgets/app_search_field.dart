@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_radius.dart';
+
 class AppSearchField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final String hintText;
@@ -17,7 +19,9 @@ class AppSearchField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         prefixIcon: const Icon(Icons.search),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
       ),
     );
   }

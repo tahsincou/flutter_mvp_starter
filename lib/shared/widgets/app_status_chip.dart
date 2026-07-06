@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logistic_operation/shared/theme/app_text_styles.dart';
 
 import '../theme/app_colors.dart';
 
@@ -13,10 +14,7 @@ class AppStatusChip extends StatelessWidget {
 
     return Chip(
       avatar: Icon(style.icon, size: 18, color: style.foreground),
-      label: Text(
-        status,
-        style: TextStyle(color: style.foreground, fontWeight: FontWeight.w600),
-      ),
+      label: Text(status, style: AppTextStyles.caption),
       backgroundColor: style.background,
       side: BorderSide.none,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

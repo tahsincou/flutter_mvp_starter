@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:logistic_operation/shared/theme/app_spacing.dart';
+import 'package:logistic_operation/shared/theme/app_text_styles.dart';
 
 class InfoTile extends StatelessWidget {
   final IconData icon;
@@ -15,12 +17,12 @@ class InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(AppSpacing.md),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         leading: Icon(icon),
         title: Text(title),
-        subtitle: Text(value),
+        subtitle: Text(value, style: AppTextStyles.body),
       ),
     );
   }

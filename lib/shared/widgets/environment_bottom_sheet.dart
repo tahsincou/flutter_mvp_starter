@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:logistic_operation/core/config/app_config.dart';
 import 'package:logistic_operation/core/config/environment.dart';
+import 'package:logistic_operation/shared/theme/app_text_styles.dart';
+
+import '../theme/app_spacing.dart';
 
 Future<bool?> showEnvironmentBottomSheet(BuildContext context) async {
   Environment selected = AppConfig.environment;
@@ -16,16 +19,13 @@ Future<bool?> showEnvironmentBottomSheet(BuildContext context) async {
       return StatefulBuilder(
         builder: (context, setState) {
           return Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(AppSpacing.md),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Environment',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Environment', style: AppTextStyles.heading),
 
-                const SizedBox(height: 16),
+                SizedBox(height: AppSpacing.lg),
 
                 ...availableEnvironments.map(
                   (environment) => RadioListTile<Environment>(
@@ -41,7 +41,7 @@ Future<bool?> showEnvironmentBottomSheet(BuildContext context) async {
                   ),
                 ),
 
-                const SizedBox(height: 12),
+                SizedBox(height: AppSpacing.lg),
 
                 SizedBox(
                   width: double.infinity,
